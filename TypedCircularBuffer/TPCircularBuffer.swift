@@ -76,4 +76,45 @@ extension TPCircularBuffer {
 			TPCircularBufferSetAtomic(&self, newValue)
 		}
 	}
+	
+	
+	// MARK: Metadata
+	
+	/// The number of bytes in the buffer available for reading.
+	var count: UInt32 {
+		mutating get {
+			return self.availableBytes
+		}
+	}
+
+	/// The total number of slots for bytes in the buffer.
+	var capacity: UInt32 {
+		get {
+			return self.length
+		}
+	}
+	
+	/// The number of bytes in the buffer available for reading.
+	var availableBytes: UInt32 {
+		mutating get {
+			var availableBytes: UInt32 = 0
+			_ = TPCircularBufferTail(&self, &availableBytes)
+			
+			return availableBytes
+		}
+	}
+	
+	/// A Boolean value indicating whether the collection is empty.
+	var isEmpty: Bool {
+		mutating get {
+			return self.availableBytes == 0
+		}
+	}
+	
+	/// A Boolean value indicating whether the collection is full.
+	var isFull: Bool {
+		mutating get {
+			return self.availableBytes == self.length
+		}
+	}
 }
