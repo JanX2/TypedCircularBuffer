@@ -108,32 +108,38 @@ public struct TypedCircularBuffer<Element: Strideable> {
 	Array of elements or `nil` if requested amount is greater than current buffer size
 	*/
 	@discardableResult public mutating func pop(amount: Int) -> [Element]? {
-		let optionalPointer = popBuffer(amount: amount)
+		var optionalArray: [Element]?
 		
-		guard let bufferPointer = optionalPointer else { return nil }
+		popUnsafeBuffer(amount: amount) { optionalPointer in
+			if let bufferPointer = optionalPointer {
+				optionalArray =  Array(bufferPointer)
+			}
+			else {
+				optionalArray = nil
+			}
+		}
 		
-		let array = Array(bufferPointer)
-		
-		return array
+		return optionalArray
 	}
 	
-	@discardableResult public mutating func popBuffer(amount: Int) -> UnsafeBufferPointer<Element>? {
+	public mutating func popUnsafeBuffer(amount: Int,
+										 _ body: (UnsafeBufferPointer<Element>?) -> ()) {
 		let (optionalPointer, availableBytes) = circularBuffer.yieldAvailableBytes()
 		
-		guard let rawPointer = optionalPointer else { return nil }
+		guard let rawPointer = optionalPointer else { return }
 		let count = Int(availableBytes) / bytesPerValue
 		
-		guard amount <= count else { return nil }
+		guard amount <= count else { return }
 		
 		let pointer = rawPointer.bindMemory(to: Element.self,
 											capacity: count)
 		let bufferPointer = UnsafeBufferPointer(start: pointer,
 												count: amount)
 		
+		body(bufferPointer)
+		
 		let readSize = UInt32(amount * bytesPerValue)
 		circularBuffer.freeUpBytes(size: readSize)
-		
-		return bufferPointer
 	}
 	
 	
