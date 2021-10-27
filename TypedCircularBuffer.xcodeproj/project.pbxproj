@@ -11,6 +11,11 @@
 		3D540653272559BC008CFFDB /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D5406512725599D008CFFDB /* TPCircularBuffer.c */; };
 		3D54065627255A10008CFFDB /* TypedCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */; };
 		3D54065E27256B8E008CFFDB /* TPCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */; };
+		3DF9F2232728871400FBC787 /* TypedCircularBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF9F2222728871400FBC787 /* TypedCircularBufferTests.swift */; };
+		3DF9F22A2728872700FBC787 /* TypedCircularBufferMultipleItemsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF9F2192728863900FBC787 /* TypedCircularBufferMultipleItemsTests.swift */; };
+		3DF9F23127288A0200FBC787 /* TypedCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */; };
+		3DF9F23427288A1400FBC787 /* TPCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */; };
+		3DF9F23727288A1800FBC787 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D5406512725599D008CFFDB /* TPCircularBuffer.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,10 +42,22 @@
 		3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedCircularBuffer.swift; sourceTree = "<group>"; };
 		3D54065927255AEB008CFFDB /* TypedCircularBuffer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TypedCircularBuffer-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPCircularBuffer.swift; sourceTree = "<group>"; };
+		3DF9F2192728863900FBC787 /* TypedCircularBufferMultipleItemsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedCircularBufferMultipleItemsTests.swift; sourceTree = "<group>"; };
+		3DF9F2202728871400FBC787 /* TypedCircularBufferTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TypedCircularBufferTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DF9F2222728871400FBC787 /* TypedCircularBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedCircularBufferTests.swift; sourceTree = "<group>"; };
+		3DF9F2242728871400FBC787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DF9F24227288B0D00FBC787 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3D54063E27255361008CFFDB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DF9F21D2728871400FBC787 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -56,6 +73,7 @@
 				3D54065927255AEB008CFFDB /* TypedCircularBuffer-Bridging-Header.h */,
 				3D54064327255361008CFFDB /* TypedCircularBuffer */,
 				3D54064C2725599D008CFFDB /* TPCircularBuffer */,
+				3DF9F2212728871400FBC787 /* TypedCircularBufferTests */,
 				3D54064227255361008CFFDB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -64,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				3D54064127255361008CFFDB /* TypedCircularBuffer */,
+				3DF9F2202728871400FBC787 /* TypedCircularBufferTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -72,8 +91,8 @@
 			isa = PBXGroup;
 			children = (
 				3D54064427255361008CFFDB /* main.swift */,
-				3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */,
 				3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */,
+				3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */,
 			);
 			path = TypedCircularBuffer;
 			sourceTree = "<group>";
@@ -92,6 +111,17 @@
 			path = External/TPCircularBuffer;
 			sourceTree = "<group>";
 			usesTabs = 0;
+		};
+		3DF9F2212728871400FBC787 /* TypedCircularBufferTests */ = {
+			isa = PBXGroup;
+			children = (
+				3DF9F24227288B0D00FBC787 /* Bridging-Header.h */,
+				3DF9F2222728871400FBC787 /* TypedCircularBufferTests.swift */,
+				3DF9F2192728863900FBC787 /* TypedCircularBufferMultipleItemsTests.swift */,
+				3DF9F2242728871400FBC787 /* Info.plist */,
+			);
+			path = TypedCircularBufferTests;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -113,6 +143,23 @@
 			productReference = 3D54064127255361008CFFDB /* TypedCircularBuffer */;
 			productType = "com.apple.product-type.tool";
 		};
+		3DF9F21F2728871400FBC787 /* TypedCircularBufferTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DF9F2252728871400FBC787 /* Build configuration list for PBXNativeTarget "TypedCircularBufferTests" */;
+			buildPhases = (
+				3DF9F21C2728871400FBC787 /* Sources */,
+				3DF9F21D2728871400FBC787 /* Frameworks */,
+				3DF9F21E2728871400FBC787 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TypedCircularBufferTests;
+			productName = TypedCircularBufferTests;
+			productReference = 3DF9F2202728871400FBC787 /* TypedCircularBufferTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -123,6 +170,9 @@
 				LastUpgradeCheck = 1240;
 				TargetAttributes = {
 					3D54064027255361008CFFDB = {
+						CreatedOnToolsVersion = 12.4;
+					};
+					3DF9F21F2728871400FBC787 = {
 						CreatedOnToolsVersion = 12.4;
 					};
 				};
@@ -141,9 +191,20 @@
 			projectRoot = "";
 			targets = (
 				3D54064027255361008CFFDB /* TypedCircularBuffer */,
+				3DF9F21F2728871400FBC787 /* TypedCircularBufferTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3DF9F21E2728871400FBC787 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3D54063D27255361008CFFDB /* Sources */ = {
@@ -154,6 +215,18 @@
 				3D540653272559BC008CFFDB /* TPCircularBuffer.c in Sources */,
 				3D54065627255A10008CFFDB /* TypedCircularBuffer.swift in Sources */,
 				3D54064527255361008CFFDB /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DF9F21C2728871400FBC787 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DF9F22A2728872700FBC787 /* TypedCircularBufferMultipleItemsTests.swift in Sources */,
+				3DF9F2232728871400FBC787 /* TypedCircularBufferTests.swift in Sources */,
+				3DF9F23727288A1800FBC787 /* TPCircularBuffer.c in Sources */,
+				3DF9F23427288A1400FBC787 /* TPCircularBuffer.swift in Sources */,
+				3DF9F23127288A0200FBC787 /* TypedCircularBuffer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +368,42 @@
 			};
 			name = Release;
 		};
+		3DF9F2262728871400FBC787 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = TypedCircularBufferTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.geheimwerk.TypedCircularBufferTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SWIFT_MODULE_NAME)/Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3DF9F2272728871400FBC787 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = TypedCircularBufferTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = de.geheimwerk.TypedCircularBufferTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SWIFT_MODULE_NAME)/Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -312,6 +421,15 @@
 			buildConfigurations = (
 				3D54064927255361008CFFDB /* Debug */,
 				3D54064A27255361008CFFDB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DF9F2252728871400FBC787 /* Build configuration list for PBXNativeTarget "TypedCircularBufferTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DF9F2262728871400FBC787 /* Debug */,
+				3DF9F2272728871400FBC787 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
