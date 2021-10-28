@@ -8,14 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		3D54064527255361008CFFDB /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54064427255361008CFFDB /* main.swift */; };
-		3D540653272559BC008CFFDB /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D5406512725599D008CFFDB /* TPCircularBuffer.c */; };
 		3D54065627255A10008CFFDB /* TypedCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */; };
-		3D54065E27256B8E008CFFDB /* TPCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */; };
 		3DF9F2232728871400FBC787 /* TypedCircularBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF9F2222728871400FBC787 /* TypedCircularBufferTests.swift */; };
 		3DF9F22A2728872700FBC787 /* TypedCircularBufferMultipleItemsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF9F2192728863900FBC787 /* TypedCircularBufferMultipleItemsTests.swift */; };
 		3DF9F23127288A0200FBC787 /* TypedCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */; };
-		3DF9F23427288A1400FBC787 /* TPCircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */; };
-		3DF9F23727288A1800FBC787 /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D5406512725599D008CFFDB /* TPCircularBuffer.c */; };
+		3DF9F250272AF8A800FBC787 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF9F24F272AF8A800FBC787 /* RingBuffer.swift */; };
+		3DF9F251272AF8A800FBC787 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF9F24F272AF8A800FBC787 /* RingBuffer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,20 +31,12 @@
 /* Begin PBXFileReference section */
 		3D54064127255361008CFFDB /* TypedCircularBuffer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TypedCircularBuffer; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D54064427255361008CFFDB /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		3D54064D2725599D008CFFDB /* TPCircularBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
-		3D54064E2725599D008CFFDB /* TPCircularBuffer+AudioBufferList.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "TPCircularBuffer+AudioBufferList.c"; sourceTree = "<group>"; };
-		3D54064F2725599D008CFFDB /* TPCircularBuffer.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = TPCircularBuffer.podspec; sourceTree = "<group>"; };
-		3D5406502725599D008CFFDB /* README.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.markdown; sourceTree = "<group>"; };
-		3D5406512725599D008CFFDB /* TPCircularBuffer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
-		3D5406522725599D008CFFDB /* TPCircularBuffer+AudioBufferList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TPCircularBuffer+AudioBufferList.h"; sourceTree = "<group>"; };
 		3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedCircularBuffer.swift; sourceTree = "<group>"; };
-		3D54065927255AEB008CFFDB /* TypedCircularBuffer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TypedCircularBuffer-Bridging-Header.h"; sourceTree = "<group>"; };
-		3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPCircularBuffer.swift; sourceTree = "<group>"; };
 		3DF9F2192728863900FBC787 /* TypedCircularBufferMultipleItemsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedCircularBufferMultipleItemsTests.swift; sourceTree = "<group>"; };
 		3DF9F2202728871400FBC787 /* TypedCircularBufferTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TypedCircularBufferTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DF9F2222728871400FBC787 /* TypedCircularBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypedCircularBufferTests.swift; sourceTree = "<group>"; };
 		3DF9F2242728871400FBC787 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3DF9F24227288B0D00FBC787 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		3DF9F24F272AF8A800FBC787 /* RingBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,9 +60,7 @@
 		3D54063827255361008CFFDB = {
 			isa = PBXGroup;
 			children = (
-				3D54065927255AEB008CFFDB /* TypedCircularBuffer-Bridging-Header.h */,
 				3D54064327255361008CFFDB /* TypedCircularBuffer */,
-				3D54064C2725599D008CFFDB /* TPCircularBuffer */,
 				3DF9F2212728871400FBC787 /* TypedCircularBufferTests */,
 				3D54064227255361008CFFDB /* Products */,
 			);
@@ -91,31 +79,15 @@
 			isa = PBXGroup;
 			children = (
 				3D54064427255361008CFFDB /* main.swift */,
-				3D54065D27256B8E008CFFDB /* TPCircularBuffer.swift */,
+				3DF9F24F272AF8A800FBC787 /* RingBuffer.swift */,
 				3D54065527255A10008CFFDB /* TypedCircularBuffer.swift */,
 			);
 			path = TypedCircularBuffer;
 			sourceTree = "<group>";
 		};
-		3D54064C2725599D008CFFDB /* TPCircularBuffer */ = {
-			isa = PBXGroup;
-			children = (
-				3D54064D2725599D008CFFDB /* TPCircularBuffer.h */,
-				3D5406512725599D008CFFDB /* TPCircularBuffer.c */,
-				3D5406522725599D008CFFDB /* TPCircularBuffer+AudioBufferList.h */,
-				3D54064E2725599D008CFFDB /* TPCircularBuffer+AudioBufferList.c */,
-				3D54064F2725599D008CFFDB /* TPCircularBuffer.podspec */,
-				3D5406502725599D008CFFDB /* README.markdown */,
-			);
-			name = TPCircularBuffer;
-			path = External/TPCircularBuffer;
-			sourceTree = "<group>";
-			usesTabs = 0;
-		};
 		3DF9F2212728871400FBC787 /* TypedCircularBufferTests */ = {
 			isa = PBXGroup;
 			children = (
-				3DF9F24227288B0D00FBC787 /* Bridging-Header.h */,
 				3DF9F2222728871400FBC787 /* TypedCircularBufferTests.swift */,
 				3DF9F2192728863900FBC787 /* TypedCircularBufferMultipleItemsTests.swift */,
 				3DF9F2242728871400FBC787 /* Info.plist */,
@@ -211,8 +183,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D54065E27256B8E008CFFDB /* TPCircularBuffer.swift in Sources */,
-				3D540653272559BC008CFFDB /* TPCircularBuffer.c in Sources */,
+				3DF9F250272AF8A800FBC787 /* RingBuffer.swift in Sources */,
 				3D54065627255A10008CFFDB /* TypedCircularBuffer.swift in Sources */,
 				3D54064527255361008CFFDB /* main.swift in Sources */,
 			);
@@ -224,9 +195,8 @@
 			files = (
 				3DF9F22A2728872700FBC787 /* TypedCircularBufferMultipleItemsTests.swift in Sources */,
 				3DF9F2232728871400FBC787 /* TypedCircularBufferTests.swift in Sources */,
-				3DF9F23727288A1800FBC787 /* TPCircularBuffer.c in Sources */,
-				3DF9F23427288A1400FBC787 /* TPCircularBuffer.swift in Sources */,
 				3DF9F23127288A0200FBC787 /* TypedCircularBuffer.swift in Sources */,
+				3DF9F251272AF8A800FBC787 /* RingBuffer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +323,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SWIFT_MODULE_NAME)-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -363,7 +332,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SWIFT_MODULE_NAME)-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -381,7 +349,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.geheimwerk.TypedCircularBufferTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SWIFT_MODULE_NAME)/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -399,7 +366,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.geheimwerk.TypedCircularBufferTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SWIFT_MODULE_NAME)/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

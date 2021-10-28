@@ -10,56 +10,56 @@
 import Foundation
 
 
-public struct TypedCircularBuffer<Element: Strideable> {
-	private var circularBuffer: TPCircularBuffer
-	
+class TypedCircularBuffer<Element: Strideable> {
+	private var ringBuffer: RingBuffer
 	
 	// MARK: Metadata
 	
 	private let bytesPerValue: Int = MemoryLayout<Element>.stride
 	
+	/// The number of elements in the buffer available for reading.
 	var count: Int {
-		mutating get {
-			return Int(circularBuffer.count) / bytesPerValue
+		get {
+			return ringBuffer.count / bytesPerValue
 		}
 	}
 	
 	/// The total number of slots for bytes in the buffer.
 	var capacity: Int {
 		get {
-			return Int(circularBuffer.capacity) / bytesPerValue
+			return Int(ringBuffer.capacity) / bytesPerValue
 		}
 	}
 	
 	/// The number of slots in the buffer available for writing.
 	var available: Int {
-		mutating get {
-			return Int(circularBuffer.availableBytes) / bytesPerValue
+		get {
+			return Int(ringBuffer.availableBytesForWriting) / bytesPerValue
 		}
 	}
 	
 	/// A Boolean value indicating whether the collection is empty.
 	var isEmpty: Bool {
-		mutating get {
-			return circularBuffer.isEmpty
+		get {
+			return ringBuffer.isEmpty
 		}
 	}
 	
 	/// A Boolean value indicating whether the collection is full.
 	var isFull: Bool {
-		mutating get {
-			return circularBuffer.isFull
+		get {
+			return ringBuffer.isFull
 		}
 	}
 	
 	/// Write index.
 	var head: Int {
-		return Int(circularBuffer.head) / bytesPerValue
+		return Int(ringBuffer.headOffset) / bytesPerValue
 	}
 	
 	/// Read index.
 	var tail: Int {
-		return Int(circularBuffer.tail) / bytesPerValue
+		return Int(ringBuffer.tailOffset) / bytesPerValue
 	}
 	
 	var maxCapacity: Int {
@@ -69,20 +69,19 @@ public struct TypedCircularBuffer<Element: Strideable> {
 	
 	// MARK: Lifecycle
 	
-	init(minimumCapacity: Int) {
+	init?(minimumCapacity: Int) {
 		let maxCapacity = Int(UInt32.max) / bytesPerValue
 		precondition(minimumCapacity <= maxCapacity)
+		let minimumSize = minimumCapacity * bytesPerValue
 		
-		circularBuffer = TPCircularBuffer(size: UInt32(minimumCapacity * bytesPerValue))
+		let optionalRingBuffer = RingBuffer(minimumSize: minimumSize)
+		guard let ringBuffer = optionalRingBuffer else { return nil }
+		
+		self.ringBuffer = ringBuffer
 	}
 	
-	/// Required. It’s a good idea to call this via `defer` or from a `deinit`.
-	mutating func cleanup() {
-		circularBuffer.cleanup()
-	}
-	
-	mutating func removeAll() {
-		circularBuffer.clearAll()
+	func removeAll() {
+		ringBuffer.removeAll()
 	}
 	
 	
@@ -94,7 +93,7 @@ public struct TypedCircularBuffer<Element: Strideable> {
 	- returns:
 	Element or `nil` if buffer is empty
 	*/
-	@discardableResult public mutating func pop() -> Element? {
+	@discardableResult public func pop() -> Element? {
 		return pop(amount: 1)?.first
 	}
 	
@@ -107,7 +106,8 @@ public struct TypedCircularBuffer<Element: Strideable> {
 	-  returns:
 	Array of elements or `nil` if requested amount is greater than current buffer size
 	*/
-	@discardableResult public mutating func pop(amount: Int) -> [Element]? {
+	@discardableResult public func pop(amount: Int) -> [Element]? {
+		
 		var optionalArray: [Element]?
 		
 		popUnsafeBuffer(amount: amount) { optionalPointer in
@@ -122,39 +122,42 @@ public struct TypedCircularBuffer<Element: Strideable> {
 		return optionalArray
 	}
 	
-	public mutating func popUnsafeBuffer(amount: Int,
-										 _ body: (UnsafeBufferPointer<Element>?) -> ()) {
-		let (optionalPointer, availableBytes) = circularBuffer.yieldAvailableBytes()
+	public func popUnsafeBuffer(amount: Int,
+								_ body: (UnsafeBufferPointer<Element>?) -> ()) {
 		
-		guard let rawPointer = optionalPointer else { return }
-		let count = Int(availableBytes) / bytesPerValue
+		let requestedSize = amount * bytesPerValue
+		guard requestedSize <= ringBuffer.availableBytesForReading else {
+			body(nil)
+			return
+		}
 		
-		guard amount <= count else { return }
+		ringBuffer.read(requestedSize: requestedSize) {
+			rawPointer, availableBytes in
+			let count = availableBytes / bytesPerValue
+
+			let pointer = rawPointer.bindMemory(to: Element.self,
+												capacity: count)
+			let bufferPointer = UnsafeBufferPointer(start: pointer,
+													count: count)
+			
+			body(bufferPointer)
+		}
 		
-		let pointer = rawPointer.bindMemory(to: Element.self,
-											capacity: count)
-		let bufferPointer = UnsafeBufferPointer(start: pointer,
-												count: amount)
-		
-		body(bufferPointer)
-		
-		let readSize = UInt32(amount * bytesPerValue)
-		circularBuffer.freeUpBytes(size: readSize)
 	}
 	
 	
 	// MARK: Store elements
 	
 	/// Push single element (overwrite on overflow by default)
-	public mutating func push(_ value: Element) {
-		precondition(bytesPerValue <= circularBuffer.capacity)
+	public func push(_ value: Element) {
+		precondition(bytesPerValue <= ringBuffer.capacity)
 		var temp = value
-		circularBuffer.storeBytes(from: &temp,
-								  size: UInt32(bytesPerValue))
+		ringBuffer.write(&temp,
+						 requestedSize: bytesPerValue)
 	}
 	
 	/// Push multiple elements (overwrite on overflow by default)
-	public mutating func push(_ values: [Element]) {
+	public func push(_ values: [Element]) {
 		if values.isEmpty { return }
 		
 		values.withUnsafeBufferPointer { bufferPointer -> Void in
@@ -162,13 +165,13 @@ public struct TypedCircularBuffer<Element: Strideable> {
 		}
 	}
 	
-	public mutating func push(_ bufferPointer: UnsafeBufferPointer<Element>) {
+	public func push(_ bufferPointer: UnsafeBufferPointer<Element>) {
 		guard let pointer = bufferPointer.baseAddress else { return }
 		let size = bufferPointer.count * bytesPerValue
 		
-		precondition(size <= circularBuffer.capacity)
-		circularBuffer.storeBytes(from: pointer,
-								  size: UInt32(size))
+		precondition(size <= ringBuffer.capacity)
+		ringBuffer.write(pointer,
+						 requestedSize: size)
 	}
 	
 }
