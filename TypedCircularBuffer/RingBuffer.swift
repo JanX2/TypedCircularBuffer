@@ -36,7 +36,7 @@ private func roundToNextPageSize(_ x: vm_size_t) -> vm_size_t {
 }
 
 @objc(DLTARingBuffer) @objcMembers
-class RingBuffer: NSObject {
+public class RingBuffer: NSObject {
 	var isEnabled: Bool = true
 	
 	/// The number of bytes in the buffer available for reading.
@@ -55,14 +55,14 @@ class RingBuffer: NSObject {
 	}
 	
 	/// A Boolean value indicating whether the collection is empty.
-	var isEmpty: Bool {
+	public var isEmpty: Bool {
 		get {
 			return self.availableBytesForReading == 0
 		}
 	}
 	
 	/// A Boolean value indicating whether the collection is full.
-	var isFull: Bool {
+	public var isFull: Bool {
 		get {
 			return self.availableBytesForWriting == self.count
 		}
@@ -81,16 +81,16 @@ class RingBuffer: NSObject {
 	}
 	
 	/// The total number of slots for bytes in the buffer.
-	private(set) var capacity = 0
+	public private(set) var capacity = 0
 	
 	/// Pointer to the internal, mirrored buffer.
 	private let buffer: UnsafeMutableRawPointer
 	
 	/// Read index.
-	private(set) var tailOffset = 0
+	public private(set) var tailOffset = 0
 	
 	/// Write index.
-	private(set) var headOffset = 0
+	public private(set) var headOffset = 0
 	
 	/// The internal number of bytes in the buffer available for reading.
 	private var usedBytesCount: Int32 = 0
@@ -171,7 +171,7 @@ class RingBuffer: NSObject {
 	}
 }
 
-extension RingBuffer {
+public extension RingBuffer {
 	/// Writes `size` bytes from `buffer` to ring buffer if possible. Otherwise, writes as many as possible.
 	/// Returns the number of bytes written.
 	/// Equivalent to `TPCircularBufferTail()` + `TPCircularBufferConsume()`.
