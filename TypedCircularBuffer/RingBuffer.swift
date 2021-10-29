@@ -121,6 +121,7 @@ public class RingBuffer: NSObject {
 			guard vm_deallocate(mach_task_self_, bufferAddress + length, length) == ERR_SUCCESS else {
 				// If this fails somehow, deallocate the whole region and try again.
 				vm_deallocate(mach_task_self_, bufferAddress, length)
+				
 				continue
 			}
 			
@@ -143,6 +144,7 @@ public class RingBuffer: NSObject {
 				// If this remap failed, we hit a race condition,
 				// so deallocate and try again.
 				vm_deallocate(mach_task_self_, bufferAddress, length)
+				
 				continue
 			}
 			
