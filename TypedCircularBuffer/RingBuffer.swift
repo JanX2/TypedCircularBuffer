@@ -79,7 +79,7 @@ public class RingBuffer: NSObject {
 	/// The total number of slots for bytes in the buffer.
 	public private(set) var capacity = 0
 	
-	/// Pointer to the internal, mirrored buffer.
+	/// Pointer to the internal, virtually endless buffer.
 	private let buffer: UnsafeMutableRawPointer
 	
 	/// Read index.
