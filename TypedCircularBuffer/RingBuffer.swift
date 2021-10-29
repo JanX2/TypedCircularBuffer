@@ -41,6 +41,110 @@ public class RingBuffer: NSObject {
 	
 	/// The number of bytes in the buffer available for reading.
 	public var count: Int {
+		return circularBuffer.count
+	}
+	
+	/// The number of bytes in the buffer available for writing.
+	public var availableBytesForWriting: Int {
+		return circularBuffer.availableBytesForWriting
+	}
+	
+	/// The number of bytes in the buffer available for reading.
+	public var availableBytesForReading: Int {
+		return circularBuffer.availableBytesForReading
+	}
+	
+	/// A Boolean value indicating whether the collection is empty.
+	public var isEmpty: Bool {
+		return circularBuffer.isEmpty
+	}
+	
+	/// A Boolean value indicating whether the collection is full.
+	public var isFull: Bool {
+		return circularBuffer.isFull
+	}
+	
+	/// The total number of slots for bytes in the buffer.
+	public var capacity: Int {
+		return circularBuffer.capacity
+	}
+	
+	/// Pointer to the internal, virtually endless buffer.
+	private var circularBuffer: CircularBuffer
+	
+	/// Read index.
+	public var tailOffset: Int {
+		return circularBuffer.tailOffset
+	}
+	
+	/// Write index.
+	public var headOffset: Int {
+		return circularBuffer.headOffset
+	}
+	
+	init?(minimumSize: Int) {
+		guard let circularBuffer = CircularBuffer(minimumSize: minimumSize)
+		else {
+			return nil
+		}
+		
+		self.circularBuffer = circularBuffer
+		
+		super.init()
+	}
+	
+	/// Equivalent to `TPCircularBufferCleanup()`.
+	deinit {
+		circularBuffer.cleanup()
+	}
+}
+
+public extension RingBuffer {
+	/// Writes `size` bytes from `buffer` to ring buffer if possible. Otherwise, writes as many as possible.
+	/// Returns the number of bytes written.
+	/// Equivalent to `TPCircularBufferTail()` + `TPCircularBufferConsume()`.
+	@objc(writeBuffer:size:)
+	@discardableResult func write(_ buffer: UnsafeRawPointer,
+								  requestedSize: Int) -> Int {
+		return circularBuffer.write(buffer, requestedSize: requestedSize)
+	}
+	
+	
+	func read(requestedSize: Int,
+			  _ body: (_ rawReadPointer: UnsafeMutableRawPointer,
+					   _ size: Int) -> ()) {
+		circularBuffer.read(requestedSize: requestedSize, body)
+	}
+	
+	/// Copies `size` bytes from ring buffer to `buffer` if possible. Otherwise, copies as many as possible.
+	/// Returns the number of bytes read.
+	/// Equivalent to `TPCircularBufferProduceBytes()`.
+	@objc(readIntoBuffer:requestedSize:)
+	@discardableResult func read(into buffer: UnsafeMutableRawPointer,
+								 requestedSize: Int) -> Int {
+		circularBuffer.read(into: buffer,
+							requestedSize: requestedSize)
+	}
+	
+	func readBuffer(requestedSize: Int,
+					_ body: (UnsafeBufferPointer<Int8>) -> ()) {
+		
+		circularBuffer.readBuffer(requestedSize: requestedSize,
+								  body)
+	}
+	
+	/// Equivalent to `TPCircularBufferClear()`.
+	func removeAll() {
+		circularBuffer.removeAll()
+	}
+}
+
+
+public struct CircularBuffer {
+	var isEnabled: Bool = true
+	
+	/// The number of bytes in the buffer available for reading.
+	public var count: Int {
 		return Int(self.usedBytesCount)
 	}
 	
@@ -163,18 +267,30 @@ public class RingBuffer: NSObject {
 	}
 	
 	/// Equivalent to `TPCircularBufferCleanup()`.
-	deinit {
+	/// Required.
+	mutating func cleanup() {
 		let address = UInt(bitPattern: self.buffer)
 		vm_deallocate(mach_task_self_, vm_address_t(address), vm_size_t(self.capacity * 2))
 	}
 }
 
-public extension RingBuffer {
+private extension CircularBuffer {
+	mutating func incrementAvailableBytes(by size: Int) {
+		self.tailOffset = (self.tailOffset + size) % self.capacity
+		OSAtomicAdd32(-Int32(size), &self.usedBytesCount)
+	}
+	
+	mutating func decrementAvailableBytes(by size: Int) {
+		self.headOffset = (self.headOffset + size) % self.capacity
+		OSAtomicAdd32(Int32(size), &self.usedBytesCount)
+	}
+}
+
+public extension CircularBuffer {
 	/// Writes `size` bytes from `buffer` to ring buffer if possible. Otherwise, writes as many as possible.
 	/// Returns the number of bytes written.
 	/// Equivalent to `TPCircularBufferTail()` + `TPCircularBufferConsume()`.
-	@objc(writeBuffer:size:)
-	@discardableResult func write(_ buffer: UnsafeRawPointer,
+	@discardableResult mutating func write(_ buffer: UnsafeRawPointer,
 								  requestedSize: Int) -> Int {
 		guard self.isEnabled else { return 0 }
 		guard self.availableBytesForWriting > 0 else { return 0 }
@@ -195,7 +311,7 @@ public extension RingBuffer {
 	}
 	
 	
-	func read(requestedSize: Int,
+	mutating func read(requestedSize: Int,
 			  _ body: (_ rawReadPointer: UnsafeMutableRawPointer,
 					   _ size: Int) -> ()) {
 		guard self.isEnabled else { return }
@@ -217,8 +333,7 @@ public extension RingBuffer {
 	/// Copies `size` bytes from ring buffer to `buffer` if possible. Otherwise, copies as many as possible.
 	/// Returns the number of bytes read.
 	/// Equivalent to `TPCircularBufferProduceBytes()`.
-	@objc(readIntoBuffer:requestedSize:)
-	@discardableResult func read(into buffer: UnsafeMutableRawPointer,
+	@discardableResult mutating func read(into buffer: UnsafeMutableRawPointer,
 								 requestedSize: Int) -> Int {
 		var readSize: Int = 0
 		
@@ -230,7 +345,7 @@ public extension RingBuffer {
 		return readSize
 	}
 	
-	func readBuffer(requestedSize: Int,
+	mutating func readBuffer(requestedSize: Int,
 					_ body: (UnsafeBufferPointer<Int8>) -> ()) {
 		
 		read(requestedSize: requestedSize) {
@@ -246,20 +361,8 @@ public extension RingBuffer {
 	}
 	
 	/// Equivalent to `TPCircularBufferClear()`.
-	func removeAll() {
+	mutating func removeAll() {
 		let size = self.availableBytesForReading
 		self.incrementAvailableBytes(by: size)
-	}
-}
-
-private extension RingBuffer {
-	func incrementAvailableBytes(by size: Int) {
-		self.tailOffset = (self.tailOffset + size) % self.capacity
-		OSAtomicAdd32(-Int32(size), &self.usedBytesCount)
-	}
-	
-	func decrementAvailableBytes(by size: Int) {
-		self.headOffset = (self.headOffset + size) % self.capacity
-		OSAtomicAdd32(Int32(size), &self.usedBytesCount)
 	}
 }
