@@ -56,16 +56,12 @@ public class RingBuffer: NSObject {
 	
 	/// A Boolean value indicating whether the collection is empty.
 	public var isEmpty: Bool {
-		get {
-			return self.availableBytesForReading == 0
-		}
+		return self.availableBytesForReading == 0
 	}
 	
 	/// A Boolean value indicating whether the collection is full.
 	public var isFull: Bool {
-		get {
-			return self.availableBytesForWriting == self.count
-		}
+		return self.availableBytesForWriting == self.count
 	}
 	
 	/// Write pointer.
