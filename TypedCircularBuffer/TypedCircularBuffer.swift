@@ -76,6 +76,8 @@ class TypedCircularBuffer<Element: Strideable> {
 		guard let circularBuffer = optionalCircularBuffer else { return nil }
 		
 		self.circularBuffer = circularBuffer
+		
+		assert(minimumSize <= circularBuffer.capacity)
 	}
 	
 	deinit {
