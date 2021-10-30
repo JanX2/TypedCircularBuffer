@@ -146,7 +146,7 @@ class TypedCircularBuffer<Element: Strideable> {
 		circularBuffer.read(requestedSize: requestedSize) {
 			rawPointer, availableBytes in
 			let count = availableBytes / bytesPerValue
-
+			
 			let pointer = rawPointer.bindMemory(to: Element.self,
 												capacity: count)
 			let bufferPointer = UnsafeBufferPointer(start: pointer,
@@ -165,7 +165,7 @@ class TypedCircularBuffer<Element: Strideable> {
 		precondition(bytesPerValue <= circularBuffer.capacity)
 		var temp = value
 		circularBuffer.write(&temp,
-						 requestedSize: bytesPerValue)
+							 requestedSize: bytesPerValue)
 	}
 	
 	/// Push multiple elements
@@ -184,7 +184,7 @@ class TypedCircularBuffer<Element: Strideable> {
 		
 		precondition(size <= circularBuffer.capacity)
 		circularBuffer.write(pointer,
-						 requestedSize: size)
+							 requestedSize: size)
 	}
 	
 }
