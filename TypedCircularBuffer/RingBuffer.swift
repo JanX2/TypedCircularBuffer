@@ -309,6 +309,7 @@ public extension CircularBuffer {
 			print("Circular Buffer Capacity reached. Available: \(self.availableBytesForWriting). Requested: \(requestedSize) Max: \(self.capacity). Filled: \(self.usedBytesCount).")
 			
 			self.removeAll()
+			return 0
 		}
 		
 		let size = min(requestedSize, self.availableBytesForWriting)
@@ -331,6 +332,7 @@ public extension CircularBuffer {
 			print("Circular Buffer Empty. Available: \(self.availableBytesForReading). Requested: \(requestedSize) Max: \(self.capacity). Filled: \(self.usedBytesCount).")
 			
 			self.removeAll()
+			return
 		}
 		
 		let size = min(requestedSize, self.availableBytesForReading)
