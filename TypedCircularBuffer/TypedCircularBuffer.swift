@@ -146,11 +146,15 @@ class TypedCircularBuffer<Element: Strideable> {
 		}
 		
 		circularBuffer.read(requestedSize: requestedSize) {
-			rawPointer, availableBytes in
+			rawBytes, availableBytes in
+			
+			precondition(Int(bitPattern: rawBytes)
+							.isMultiple(of: MemoryLayout<Element>.alignment))
+			
 			let count = availableBytes / bytesPerValue
 			
-			let pointer = rawPointer.bindMemory(to: Element.self,
-												capacity: count)
+			let pointer = rawBytes.bindMemory(to: Element.self,
+											  capacity: count)
 			let bufferPointer = UnsafeBufferPointer(start: pointer,
 													count: count)
 			
