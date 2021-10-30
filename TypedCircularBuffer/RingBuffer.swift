@@ -297,7 +297,7 @@ private extension CircularBuffer {
 }
 
 public extension CircularBuffer {
-	/// Writes `size` bytes from `buffer` to ring buffer if possible. Otherwise, writes as many as possible.
+	/// Writes `size` bytes from `buffer` to circular buffer if possible. Otherwise, flushes the buffer.
 	/// Returns the number of bytes written.
 	/// Equivalent to `TPCircularBufferTail()` + `TPCircularBufferConsume()`.
 	@discardableResult mutating func write(_ buffer: UnsafeRawPointer,
@@ -340,7 +340,7 @@ public extension CircularBuffer {
 		self.incrementAvailableBytes(by: size)
 	}
 	
-	/// Copies `size` bytes from ring buffer to `buffer` if possible. Otherwise, copies as many as possible.
+	/// Copies `size` bytes from the circular buffer to `buffer` if possible. Otherwise, flushes the buffer.
 	/// Returns the number of bytes read.
 	/// Equivalent to `TPCircularBufferProduceBytes()`.
 	@discardableResult mutating func read(into buffer: UnsafeMutableRawPointer,
