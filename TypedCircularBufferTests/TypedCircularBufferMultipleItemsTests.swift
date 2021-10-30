@@ -10,21 +10,21 @@
 import XCTest
 
 
-typealias Buffer = TypedCircularBuffer
+typealias Buffer = TypedCircularBuffer<Int>
 
 
 final class TypedCircularBufferMultipleItemsTests: XCTestCase {
 	
 	func testPushMultipleItems() {
 		let items = [1, 2, 3, 4, 5]
-		let buffer = Buffer<Int>(minimumCapacity: items.count)!
+		let buffer = Buffer(minimumCapacity: items.count)!
 		buffer.push(items)
 		XCTAssertEqual(buffer.count, items.count, "Buffer is not full")
 	}
 	
 	func testPopMultipleItems() {
 		let items = [1, 2, 3, 4, 5, 6]
-		let buffer = Buffer<Int>(minimumCapacity: 6)!
+		let buffer = Buffer(minimumCapacity: 6)!
 		buffer.push(items)
 		XCTAssertEqual(buffer.pop(amount: 4), [1, 2, 3, 4])
 		XCTAssertEqual(buffer.pop(amount: 2), [5, 6])
@@ -33,7 +33,7 @@ final class TypedCircularBufferMultipleItemsTests: XCTestCase {
 	
 	func testPopMultipleItemsWithOverflow() {
 		let items = [1, 2, 3, 4, 5, 6]
-		let buffer = Buffer<Int>(minimumCapacity: items.count)!
+		let buffer = Buffer(minimumCapacity: items.count)!
 		buffer.push(items)
 		XCTAssertEqual(buffer.pop(amount: items.count + 1), nil)
 		XCTAssertEqual(buffer.pop(amount: items.count), items)
@@ -41,10 +41,10 @@ final class TypedCircularBufferMultipleItemsTests: XCTestCase {
 	}
 	
 	func testLargeAmountsOfItems() {
-		let count = 2 * Buffer<Int>.capacityGranularity - 100
+		let count = 2 * Buffer.capacityGranularity - 100
 		let items = Array(0..<count)
 		
-		let buffer = Buffer<Int>(minimumCapacity: items.count)!
+		let buffer = Buffer(minimumCapacity: items.count)!
 		let capacity = buffer.capacity
 		XCTAssert(capacity >= count)
 		
