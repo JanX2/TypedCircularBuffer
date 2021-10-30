@@ -124,6 +124,16 @@ class TypedCircularBuffer<Element: Strideable> {
 		return optionalArray
 	}
 	
+	/**
+	Pop multiple elements
+	
+	- parameters:
+	- amount: Number of elements to read
+	- body: Closure that is called with a temporary buffer of elements ready for reading
+	
+	-  returns:
+	Array of elements or `nil` if requested amount is greater than current buffer size
+	*/
 	public func popUnsafeBuffer(amount: Int,
 								_ body: (UnsafeBufferPointer<Element>?) -> ()) {
 		
@@ -167,6 +177,7 @@ class TypedCircularBuffer<Element: Strideable> {
 		}
 	}
 	
+	/// Push multiple elements sourced from a buffer
 	public func push(_ bufferPointer: UnsafeBufferPointer<Element>) {
 		guard let pointer = bufferPointer.baseAddress else { return }
 		let size = bufferPointer.count * bytesPerValue
