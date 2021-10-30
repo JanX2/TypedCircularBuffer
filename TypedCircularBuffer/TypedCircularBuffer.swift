@@ -172,30 +172,42 @@ class TypedCircularBuffer<Element: Strideable> {
 	// MARK: Store elements
 	
 	/// Push single element
-	public func push(_ value: Element) {
+	@discardableResult public func push(_ value: Element) -> Bool {
 		precondition(bytesPerValue <= circularBuffer.capacity)
 		var temp = value
-		circularBuffer.write(&temp,
-							 requestedSize: bytesPerValue)
+		
+		let writtenSize =
+			circularBuffer.write(&temp,
+								 requestedSize: bytesPerValue)
+		
+		return writtenSize == bytesPerValue
 	}
 	
 	/// Push multiple elements
-	public func push(_ values: [Element]) {
-		if values.isEmpty { return }
+	@discardableResult public func push(_ values: [Element]) -> Int {
+		if values.isEmpty { return 0 }
+		
+		var writtenAmount = 0
 		
 		values.withUnsafeBufferPointer { bufferPointer -> Void in
-			push(bufferPointer)
+			writtenAmount = push(bufferPointer)
 		}
+		
+		return writtenAmount
 	}
 	
 	/// Push multiple elements sourced from a buffer
-	public func push(_ bufferPointer: UnsafeBufferPointer<Element>) {
-		guard let pointer = bufferPointer.baseAddress else { return }
+	@discardableResult public func push(_ bufferPointer: UnsafeBufferPointer<Element>) -> Int {
+		guard let pointer = bufferPointer.baseAddress else { return 0 }
 		let size = bufferPointer.count * bytesPerValue
 		
 		precondition(size <= circularBuffer.capacity)
-		circularBuffer.write(pointer,
-							 requestedSize: size)
+		let writtenSize =
+			circularBuffer.write(pointer,
+								 requestedSize: size)
+		
+		let writtenAmount = writtenSize / bytesPerValue
+		return writtenAmount
 	}
 	
 }
