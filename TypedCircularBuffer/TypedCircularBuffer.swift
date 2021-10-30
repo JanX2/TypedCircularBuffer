@@ -31,6 +31,11 @@ class TypedCircularBuffer<Element: Strideable> {
 		}
 	}
 	
+	/// The capacity multiple of the buffer.
+	static var capacityGranularity: Int {
+		return CircularBuffer.capacityGranularity / MemoryLayout<Element>.stride
+	}
+	
 	/// The number of slots in the buffer available for writing.
 	var available: Int {
 		get {

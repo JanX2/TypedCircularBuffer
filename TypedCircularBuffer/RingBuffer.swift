@@ -69,6 +69,11 @@ public class RingBuffer: NSObject {
 		return circularBuffer.capacity
 	}
 	
+	/// The capacity multiple of a buffer.
+	static var capacityGranularity: Int {
+		return CircularBuffer.capacityGranularity
+	}
+	
 	/// Pointer to the internal, virtually endless buffer.
 	private var circularBuffer: CircularBuffer
 	
@@ -182,6 +187,11 @@ public struct CircularBuffer {
 	
 	/// The total number of slots for bytes in the buffer.
 	public private(set) var capacity = 0
+	
+	/// The capacity multiple of a buffer.
+	static var capacityGranularity: Int {
+		return Int(vm_page_size)
+	}
 	
 	/// Pointer to the internal, virtually endless buffer.
 	private let buffer: UnsafeMutableRawPointer
