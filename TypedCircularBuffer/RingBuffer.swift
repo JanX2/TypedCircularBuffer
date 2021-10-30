@@ -306,7 +306,7 @@ public extension CircularBuffer {
 		guard self.availableBytesForWriting > 0 else { return 0 }
 		
 		if requestedSize > self.availableBytesForWriting {
-			print("Ring Buffer Capacity reached. Available: \(self.availableBytesForWriting). Requested: \(requestedSize) Max: \(self.capacity). Filled: \(self.usedBytesCount).")
+			print("Circular Buffer Capacity reached. Available: \(self.availableBytesForWriting). Requested: \(requestedSize) Max: \(self.capacity). Filled: \(self.usedBytesCount).")
 			
 			self.removeAll()
 		}
@@ -328,7 +328,7 @@ public extension CircularBuffer {
 		guard self.availableBytesForReading > 0 else { return }
 		
 		if requestedSize > self.availableBytesForReading {
-			print("Ring Buffer Empty. Available: \(self.availableBytesForReading). Requested: \(requestedSize) Max: \(self.capacity). Filled: \(self.usedBytesCount).")
+			print("Circular Buffer Empty. Available: \(self.availableBytesForReading). Requested: \(requestedSize) Max: \(self.capacity). Filled: \(self.usedBytesCount).")
 			
 			self.removeAll()
 		}
