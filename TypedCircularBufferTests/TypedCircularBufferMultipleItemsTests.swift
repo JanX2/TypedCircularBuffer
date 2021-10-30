@@ -46,3 +46,4 @@ final class TypedCircularBufferMultipleItemsTests: XCTestCase {
 		("testPopMultipleItemsWithOverflow", testPopMultipleItemsWithOverflow),
 	]
 }
+
