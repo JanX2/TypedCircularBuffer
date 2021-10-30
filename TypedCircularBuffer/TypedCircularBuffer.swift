@@ -98,7 +98,8 @@ class TypedCircularBuffer<Element: Strideable> {
 	
 	/**
 	Pop single element
-	
+	Removes the read element
+
 	- returns:
 	Element or `nil` if buffer is empty
 	*/
@@ -108,6 +109,7 @@ class TypedCircularBuffer<Element: Strideable> {
 	
 	/**
 	Pop multiple elements
+	Removes the read elements
 	
 	- parameters:
 	- amount: Number of elements to read
@@ -116,10 +118,32 @@ class TypedCircularBuffer<Element: Strideable> {
 	Array of elements or `nil` if requested amount is greater than current buffer size
 	*/
 	@discardableResult public func pop(amount: Int) -> [Element]? {
+		return read(amount: amount,
+					markAsAvailable: true)
+	}
+	
+	/**
+	Peek at multiple elements
+	Doesn’t remove what was read
+
+	- parameters:
+	- amount: Number of elements to read
+	
+	-  returns:
+	Array of elements or `nil` if requested amount is greater than current buffer size
+	*/
+	@discardableResult public func peekAt(amount: Int) -> [Element]? {
+		return read(amount: amount,
+					markAsAvailable: false)
+	}
+	
+	private func read(amount: Int,
+					  markAsAvailable: Bool) -> [Element]? {
 		
 		var optionalArray: [Element]?
 		
-		popUnsafeBuffer(amount: amount) { optionalPointer in
+		readUnsafeBuffer(amount: amount,
+						 markAsAvailable: markAsAvailable) { optionalPointer in
 			if let bufferPointer = optionalPointer {
 				optionalArray =  Array(bufferPointer)
 			}
@@ -133,6 +157,7 @@ class TypedCircularBuffer<Element: Strideable> {
 	
 	/**
 	Pop multiple elements
+	Removes the the read elements
 	
 	- parameters:
 	- amount: Number of elements to read
@@ -143,14 +168,60 @@ class TypedCircularBuffer<Element: Strideable> {
 	*/
 	public func popUnsafeBuffer(amount: Int,
 								_ body: (UnsafeBufferPointer<Element>?) -> ()) {
+		readUnsafeBuffer(amount: amount,
+						 markAsAvailable: true,
+						 body)
+	}
+	
+	/**
+	Peek at multiple elements
+	Doesn’t remove the read elements
+
+	- parameters:
+	- amount: Number of elements to read
+	- body: Closure that is called with a temporary buffer of elements ready for reading
+	
+	-  returns:
+	Array of elements or `nil` if requested amount is greater than current buffer size
+	*/
+	public func peekAtUnsafeBuffer(amount: Int,
+								   _ body: (UnsafeBufferPointer<Element>?) -> ()) {
+		readUnsafeBuffer(amount: amount,
+						 markAsAvailable: false,
+						 body)
+	}
+	
+	/**
+	Removes elements
+	For example those that have been previously peeked at or are not needed anymore
+	
+	- parameters:
+	- amount: Number of elements to remove
+	
+	-  returns:
+	Number of elements removed
+	*/
+	public func flush(amount: Int) -> Int {
+		let size = amount * bytesPerValue
+		let flushedSize =
+			circularBuffer.markAsAvailable(requestedSize: size)
 		
+		let flushedAmount = flushedSize / bytesPerValue
+		return flushedAmount
+	}
+	
+	
+	public func readUnsafeBuffer(amount: Int,
+								 markAsAvailable: Bool,
+								 _ body: (UnsafeBufferPointer<Element>?) -> ()) {
 		let requestedSize = amount * bytesPerValue
 		guard requestedSize <= circularBuffer.availableBytesForReading else {
 			body(nil)
 			return
 		}
 		
-		circularBuffer.read(requestedSize: requestedSize) {
+		circularBuffer.read(requestedSize: requestedSize,
+							markAsAvailable: markAsAvailable) {
 			rawBytes, availableBytes in
 			
 			precondition(Int(bitPattern: rawBytes)

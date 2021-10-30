@@ -40,6 +40,20 @@ final class TypedCircularBufferMultipleItemsTests: XCTestCase {
 		XCTAssert(buffer.isEmpty)
 	}
 	
+	func testPeekAtMultipleItems() {
+		let items = [1, 2, 3, 4, 5, 6]
+		let buffer = Buffer(minimumCapacity: 6)!
+		buffer.push(items)
+		
+		XCTAssertEqual(buffer.peekAt(amount: 4), [1, 2, 3, 4])
+		XCTAssertEqual(buffer.flush(amount: 4), 4)
+
+		XCTAssertEqual(buffer.peekAt(amount: 2), [5, 6])
+		XCTAssertEqual(buffer.flush(amount: 2), 2)
+		
+		XCTAssert(buffer.isEmpty)
+	}
+	
 	func testLargeAmountsOfItems() {
 		let count = 2 * Buffer.capacityGranularity - 100
 		let items = Array(0..<count)
@@ -73,6 +87,7 @@ final class TypedCircularBufferMultipleItemsTests: XCTestCase {
 		("testPushMultipleItems", testPushMultipleItems),
 		("testPopMultipleItems", testPopMultipleItems),
 		("testPopMultipleItemsWithOverflow", testPopMultipleItemsWithOverflow),
+		("testPeekAtMultipleItems", testPeekAtMultipleItems),
 		("testLargeAmountsOfItems", testLargeAmountsOfItems),
 	]
 }

@@ -323,6 +323,7 @@ public extension CircularBuffer {
 	
 	
 	mutating func read(requestedSize: Int,
+					   markAsAvailable: Bool = true,
 					   _ body: (_ rawReadPointer: UnsafeMutableRawPointer,
 								_ size: Int) -> ()) {
 		guard self.isEnabled else { return }
@@ -338,18 +339,22 @@ public extension CircularBuffer {
 		let size = min(requestedSize, self.availableBytesForReading)
 		body(self.tail, size)
 		
-		/// Mark bytes as available space, ready for writing to once more.
-		self.incrementAvailableBytes(by: size)
+		if markAsAvailable {
+			/// Mark bytes as available space, ready for writing to once more.
+			self.incrementAvailableBytes(by: size)
+		}
 	}
 	
 	/// Copies `size` bytes from the circular buffer to `buffer` if possible. Otherwise, flushes the buffer.
 	/// Returns the number of bytes read.
 	/// Equivalent to `TPCircularBufferProduceBytes()`.
 	@discardableResult mutating func read(into buffer: UnsafeMutableRawPointer,
+										  markAsAvailable: Bool = true,
 										  requestedSize: Int) -> Int {
 		var readSize: Int = 0
 		
-		read(requestedSize: requestedSize) { rawReadPointer, size in
+		read(requestedSize: requestedSize,
+			 markAsAvailable: markAsAvailable) { rawReadPointer, size in
 			memcpy(buffer, rawReadPointer, size)
 			readSize = size
 		}
@@ -358,9 +363,11 @@ public extension CircularBuffer {
 	}
 	
 	mutating func readBuffer(requestedSize: Int,
+							 markAsAvailable: Bool = true,
 					_ body: (UnsafeBufferPointer<Int8>) -> ()) {
 		
-		read(requestedSize: requestedSize) {
+		read(requestedSize: requestedSize,
+			 markAsAvailable: markAsAvailable) {
 			rawReadPointer, size in
 			let readPointer = rawReadPointer.bindMemory(to: Int8.self,
 														capacity: size)
@@ -371,6 +378,27 @@ public extension CircularBuffer {
 		}
 		
 	}
+	
+	
+	/// Mark bytes as available.
+	/// For example those previously read with one of the `peek…()` functions
+	/// or bytes that are not needed anymore.
+	mutating func markAsAvailable(requestedSize: Int) -> Int {
+		guard self.isEnabled else { return 0 }
+		guard self.availableBytesForReading > 0 else { return 0 }
+		
+		if requestedSize > self.availableBytesForReading {
+			return 0
+		}
+		
+		let size = min(requestedSize, self.availableBytesForReading)
+		
+		/// Mark bytes as available space, ready for writing to once more.
+		self.incrementAvailableBytes(by: size)
+		
+		return size
+	}
+	
 	
 	/// Equivalent to `TPCircularBufferClear()`.
 	mutating func removeAll() {
