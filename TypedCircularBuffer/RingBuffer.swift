@@ -301,7 +301,7 @@ public extension CircularBuffer {
 	/// Returns the number of bytes written.
 	/// Equivalent to `TPCircularBufferTail()` + `TPCircularBufferConsume()`.
 	@discardableResult mutating func write(_ buffer: UnsafeRawPointer,
-								  requestedSize: Int) -> Int {
+										   requestedSize: Int) -> Int {
 		guard self.isEnabled else { return 0 }
 		guard self.availableBytesForWriting > 0 else { return 0 }
 		
@@ -323,8 +323,8 @@ public extension CircularBuffer {
 	
 	
 	mutating func read(requestedSize: Int,
-			  _ body: (_ rawReadPointer: UnsafeMutableRawPointer,
-					   _ size: Int) -> ()) {
+					   _ body: (_ rawReadPointer: UnsafeMutableRawPointer,
+								_ size: Int) -> ()) {
 		guard self.isEnabled else { return }
 		guard self.availableBytesForReading > 0 else { return }
 		
@@ -346,7 +346,7 @@ public extension CircularBuffer {
 	/// Returns the number of bytes read.
 	/// Equivalent to `TPCircularBufferProduceBytes()`.
 	@discardableResult mutating func read(into buffer: UnsafeMutableRawPointer,
-								 requestedSize: Int) -> Int {
+										  requestedSize: Int) -> Int {
 		var readSize: Int = 0
 		
 		read(requestedSize: requestedSize) { rawReadPointer, size in
