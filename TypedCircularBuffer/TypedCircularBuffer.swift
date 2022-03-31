@@ -161,8 +161,8 @@ class TypedCircularBuffer<Element: Strideable> {
 	
 	- parameters:
 	- amount: Number of elements to read
-	- body: Closure that is called with a temporary buffer of elements ready for reading
-	
+	- body: Closure that is called with a temporary buffer of elements ready for reading or nil if not enough elements are available
+
 	-  returns:
 	Array of elements or `nil` if requested amount is greater than current buffer size
 	*/
@@ -179,7 +179,7 @@ class TypedCircularBuffer<Element: Strideable> {
 
 	- parameters:
 	- amount: Number of elements to read
-	- body: Closure that is called with a temporary buffer of elements ready for reading
+	- body: Closure that is called with a temporary buffer of elements ready for reading or nil if not enough elements are available
 	
 	-  returns:
 	Array of elements or `nil` if requested amount is greater than current buffer size
